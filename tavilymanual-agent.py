@@ -65,7 +65,6 @@ LangchainInstrumentor().instrument()
 #from traceloop.sdk import Traceloop
 #Traceloop.init(
 #  disable_batch=True, 
-#  api_key="5e354409db0e2fb83dcc3ebc1e52cff00021eb910a7d76b1db775225a3bfe6e56534335901a6f4e8793b73096be645f7"
 #)
 
 model = AzureChatOpenAI(
