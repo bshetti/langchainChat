@@ -40,11 +40,14 @@ This project demonstrates the integration of Langtrace with Elastic APM for trac
    AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
    AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name
    AZURE_OPENAI_API_VERSION=your_api_version
+   AZURE_OPENAI_API_KEY=your_api_key
 
    # OpenTelemetry settings
    OTEL_EXPORTER_OTLP_ENDPOINT=your_elastic_apm_server_url
    OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer your_elastic_apm_secret_token"
    OTEL_SERVICE_NAME=langtrace-elastic-demo
+   OTEL_RESOURCE_ATTRIBUTES="service.name=<servicename>,service.version=1.2,deployment.environment=dev"
+
    ```
 
 Note: The OTEL_EXPORTER_OTLP_HEADERS should include the full header string, including the "Authorization=Bearer" prefix.
@@ -63,7 +66,7 @@ Type 'quit' to exit the chat.
 
 ## Example Trace
 
-![Alt text](/langtrace/img/SCR-20240816-icwt-2.png "a title")
+![Alt text](/langtrace/img/Xnapper-2024-08-16-12.36.03.png "Langtrace traces")
 
 ## How it works
 
