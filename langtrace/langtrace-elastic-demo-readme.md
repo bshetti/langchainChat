@@ -34,21 +34,27 @@ This project demonstrates the integration of Langtrace with Elastic APM for trac
    ```
 
 4. Create a `.env` file in the project root and add the following environment variables:
+
    ```
+   # Azure OpenAI settings
    AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
    AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name
    AZURE_OPENAI_API_VERSION=your_api_version
-   ELASTIC_APM_SERVER_URL=your_elastic_apm_server_url
-   ELASTIC_APM_SECRET_TOKEN=your_elastic_apm_secret_token
-   SERVICE_NAME=langtrace-elastic-demo
+
+   # OpenTelemetry settings
+   OTEL_EXPORTER_OTLP_ENDPOINT=your_elastic_apm_server_url
+   OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer your_elastic_apm_secret_token"
+   OTEL_SERVICE_NAME=langtrace-elastic-demo
    ```
+
+Note: The OTEL_EXPORTER_OTLP_HEADERS should include the full header string, including the "Authorization=Bearer" prefix.
 
 ## Usage
 
 Run the script with:
 
 ```
-python langtrace-elastic-demo.py
+opentelemetry-instrument python langtrace-elastic-demo.py
 ```
 
 This will start an interactive chat interface. Type your questions and the AI will respond with information from recent web searches.

@@ -4,3 +4,4 @@ langtrace_python_sdk
 langchain
 langchain_openai
 langchain_community
+duckduckgo-search

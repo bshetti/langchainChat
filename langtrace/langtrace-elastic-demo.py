@@ -12,22 +12,23 @@ from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 # Load environment variables
 load_dotenv()
 
-# Elastic APM settings
-ELASTIC_APM_SERVER_URL = os.getenv("ELASTIC_APM_SERVER_URL")
-SERVICE_NAME = os.getenv("SERVICE_NAME", "langtrace-elastic-demo")
-ELASTIC_APM_SECRET_TOKEN = os.getenv("ELASTIC_APM_SECRET_TOKEN")
+# OpenTelemetry settings
+OTEL_EXPORTER_OTLP_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
+OTEL_SERVICE_NAME = os.getenv("OTEL_SERVICE_NAME")
+OTEL_EXPORTER_OTLP_HEADERS = os.getenv("OTEL_EXPORTER_OTLP_HEADERS")
+
+headers = dict(item.split("=") for item in OTEL_EXPORTER_OTLP_HEADERS.split(",")) if OTEL_EXPORTER_OTLP_HEADERS else {}
 
 # Set up Elastic exporter
 elastic_exporter = OTLPSpanExporter(
-    endpoint=ELASTIC_APM_SERVER_URL,
-    headers={"Authorization": f"Bearer {ELASTIC_APM_SECRET_TOKEN}"}
+    endpoint=OTEL_EXPORTER_OTLP_ENDPOINT,
+    headers=headers
 )
 
 # Initialize Langtrace with Elastic exporter
 langtrace.init(
     custom_remote_exporter=elastic_exporter,
     batch=True,
-    service_name=SERVICE_NAME
 )
 
 # Initialize Azure OpenAI model
