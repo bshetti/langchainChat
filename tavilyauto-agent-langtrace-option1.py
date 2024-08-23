@@ -1,5 +1,5 @@
 import os
-from langchain_openai import AzureChatOpenAI
+from langchain-openai import AzureChatOpenAI
 import asyncio
 
 from langtrace_python_sdk import langtrace
