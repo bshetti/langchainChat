@@ -1,15 +1,12 @@
 import os
-from fastapi import FastAPI
 from langchain_openai import AzureChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.schema.runnable import RunnableSequence
 import asyncio
 
 from langtrace_python_sdk import langtrace
 from langtrace_python_sdk.utils.with_root_span import with_langtrace_root_span
 
 langtrace.init(
-  api_key="XXX"
+  batch=True,
 )
 
 model = AzureChatOpenAI(
