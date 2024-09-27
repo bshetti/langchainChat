@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI
+#from fastapi import FastAPI
 from langchain_openai import AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnableSequence

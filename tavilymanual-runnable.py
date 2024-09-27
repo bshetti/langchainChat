@@ -31,6 +31,7 @@ if otel_exporter_otlp_endpoint is None:
 else:
     exporter = OTLPSpanExporter(endpoint=otel_exporter_otlp_endpoint, headers=otel_exporter_otlp_headers)
 
+print(otel_exporter_otlp_endpoint, otel_exporter_otlp_headers)
 
 key_value_pairs = resource_attributes.split(',')
 result_dict = {}

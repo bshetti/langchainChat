@@ -1,7 +1,7 @@
 import os
 import asyncio
-from dotenv import load_dotenv
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+#from dotenv import load_dotenv
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from langtrace_python_sdk import langtrace, with_langtrace_root_span
 from langchain_openai import AzureChatOpenAI
 from langchain.prompts import ChatPromptTemplate
@@ -9,25 +9,35 @@ from langchain.schema.runnable import RunnableSequence
 from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 
-# Load environment variables
-load_dotenv()
 
-# OpenTelemetry settings
-OTEL_EXPORTER_OTLP_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
-OTEL_SERVICE_NAME = os.getenv("OTEL_SERVICE_NAME")
-OTEL_EXPORTER_OTLP_HEADERS = os.getenv("OTEL_EXPORTER_OTLP_HEADERS")
 
-headers = dict(item.split("=") for item in OTEL_EXPORTER_OTLP_HEADERS.split(",")) if OTEL_EXPORTER_OTLP_HEADERS else {}
+#set up tracing and initialize
+otel_traces_exporter = os.environ.get('OTEL_TRACES_EXPORTER') or 'otlp'
+otel_metrics_exporter = os.environ.get('OTEL_TRACES_EXPORTER') or 'otlp'
+environment = os.environ.get('ENVIRONMENT') or 'dev'
+otel_service_version = os.environ.get('OTEL_SERVICE_VERSION') or '1.0.0'
+resource_attributes = os.environ.get('OTEL_RESOURCE_ATTRIBUTES') or 'service.version=1.0,deployment.environment=production'
 
-# Set up Elastic exporter
-elastic_exporter = OTLPSpanExporter(
-    endpoint=OTEL_EXPORTER_OTLP_ENDPOINT,
-    headers=headers
-)
+otel_exporter_otlp_headers = os.environ.get('OTEL_EXPORTER_OTLP_HEADERS')
+# fail if secret token not set
+if otel_exporter_otlp_headers is None:
+    raise Exception('OTEL_EXPORTER_OTLP_HEADERS environment variable not set')
+#else:
+#    otel_exporter_otlp_fheaders= f"Authorization=Bearer%20{secret_token}"
+
+otel_exporter_otlp_endpoint = os.environ.get('OTEL_EXPORTER_OTLP_ENDPOINT')
+# fail if server url not set
+if otel_exporter_otlp_endpoint is None:
+    raise Exception('OTEL_EXPORTER_OTLP_ENDPOINT environment variable not set')
+else:
+    exporter = OTLPSpanExporter(endpoint=otel_exporter_otlp_endpoint, headers=otel_exporter_otlp_headers)
+
+print(otel_exporter_otlp_endpoint, otel_exporter_otlp_headers)
+
 
 # Initialize Langtrace with Elastic exporter
 langtrace.init(
-    custom_remote_exporter=elastic_exporter,
+    custom_remote_exporter=exporter,
     batch=True,
 )
 
@@ -36,7 +46,7 @@ model = AzureChatOpenAI(
     azure_endpoint=os.environ['AZURE_OPENAI_ENDPOINT'],
     azure_deployment=os.environ['AZURE_OPENAI_DEPLOYMENT_NAME'],
     openai_api_version=os.environ['AZURE_OPENAI_API_VERSION'],
-    model="gpt-3.5-turbo"
+    model="gpt-4o"
 )
 
 # Initialize DuckDuckGo search

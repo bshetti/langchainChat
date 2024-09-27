@@ -9,6 +9,8 @@ langtrace.init(
   batch=True,
 )
 
+from langtrace_python_sdk.instrumentation import OpenAIInstrumentation
+
 model = AzureChatOpenAI(
     azure_endpoint=os.environ['AZURE_OPENAI_ENDPOINT'],
     azure_deployment=os.environ['AZURE_OPENAI_DEPLOYMENT_NAME'],
